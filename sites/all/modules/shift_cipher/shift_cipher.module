@@ -60,20 +60,47 @@ function shift_cipher_form_submit($form, &$form_state) {
   $shift_direction = $form_state['values']['shift_direction'];
   $shift_message = $form_state['values']['shift_message'];
 
-  $letter_values = array('a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5, 'f' => 6, 'g' => 7, 'h' => 8, 'i' => 9, 'j' => 10, 'k' => 11, 'l' => 12, 'm' => 13, 'n' => 14, 'o' => 15, 'p' => 16, 'q' => 17, 'r' => 18, 's' => 19, 't' => 20, 'u' => 21, 'v' => 22, 'w' => 23, 'x' => 24, 'y' => 25, 'z' => 26);
+  $letter_values = array('a' => 0, 'b' => 1, 'c' => 2, 'd' => 3, 'e' => 4, 'f' => 5, 'g' => 6, 'h' => 7, 'i' => 8, 'j' => 9, 'k' => 10, 'l' => 11, 'm' => 12, 'n' => 13, 'o' => 14, 'p' => 15, 'q' => 16, 'r' => 17, 's' => 18, 't' => 19, 'u' => 20, 'v' => 21, 'w' => 22, 'x' => 23, 'y' => 24, 'z' => 25, ' ' => ' ');
 
-  $number_values = array(1 => 'a', 2 => 'b', 3 => 'c', 4 => 'd', 5 => 'e', 6 => 'f', 7 => 'g', 8 => 'h', 9 => 'i', 10 => 'j', 11 => 'k', 12 => 'l', 13 => 'm', 14 => 'n', 15 => 'o', 16 => 'p', 17 => 'q', 18 => 'r', 19 => 's', 20 => 't', 21 => 'u', 22 => 'v', 23 => 'w', 24 => 'x', 25 => 'y', 26 => 'z');
+  $number_values = array(0 => 'a', 1 => 'b', 2 => 'c', 3 => 'd', 4 => 'e', 5 => 'f', 6 => 'g', 7 => 'h', 8 => 'i', 9 => 'j', 10 => 'k', 11 => 'l', 12 => 'm', 13 => 'n', 14 => 'o', 15 => 'p', 16 => 'q', 17 => 'r', 18 => 's', 19 => 't', 20 => 'u', 21 => 'v', 22 => 'w', 23 => 'x', 24 => 'y', 25 => 'z', ' ' => ' ');
 
   $message_array = str_split(strtolower($shift_message));
-  $num_str = '';
 
-  foreach($message_array as $char) {
-      $num_value = $letter_values[$char];
-      $num_shift = $num_value - $shift_value;
-      $num_str .= $num_shift;
+  $num_array = array();
+  $let_str = '';
+
+  if(strtolower($shift_direction) === 'left') {
+      foreach($message_array as $char) {
+          $num_value = $letter_values[$char];
+          if($num_value === ' ') {
+              array_push($num_array, ' ');
+          } else{
+              $num_shift = (26 + $num_value - $shift_value) % 26;
+              array_push($num_array, $num_shift);
+          }
+      }
+     foreach($num_array as $char) {
+         $letter_val = $number_values[$char];
+         $let_str .= $letter_val;
+     }
+  }
+  if(strtolower($shift_direction) === 'right') {
+      foreach($message_array as $char) {
+          $num_value = $letter_values[$char];
+          if($num_value === ' ') {
+              $num_str .= ' ';
+          } else{
+              $num_shift = (26 + $num_value + $shift_value) % 26;
+              array_push($num_array, $num_shift);
+          }
+      }
+     foreach($num_array as $char) {
+         $letter_val = $number_values[$char];
+         $let_str .= $letter_val;
+     }
   }
 
-  $result = $num_str;
+  $result = $let_str;
 
   $_SESSION['shift_cipher_output'] = $result;
   $form_state['redirect'] = 'shift_cipher_results_page';
