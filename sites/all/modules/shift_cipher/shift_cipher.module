@@ -27,15 +27,15 @@ function shift_cipher_form() {
     '#type' => 'textfield',
     '#description' => t('Please input the number you want cipher to shift'),
     '#element_validate' => array(),
-    '#required' => TRUE,
+    // '#required' => TRUE,
   );
 
   $form['shift_direction'] = array(
     '#title' => 'Shift Direction',
     '#type' => 'textfield',
-    '#description' => t('Please input the direction you want cipher to shift'),
+    '#description' => t('Please input the direction you want cipher to shift, right or left'),
     '#element_validate' => array(),
-    '#required' => TRUE,
+    // '#required' => TRUE,
   );
 
   $form['shift_message'] = array(
@@ -60,9 +60,20 @@ function shift_cipher_form_submit($form, &$form_state) {
   $shift_direction = $form_state['values']['shift_direction'];
   $shift_message = $form_state['values']['shift_message'];
 
-  $letter_values = array(1 => 'a', 2 => 'b', 3 => 'c', 4 => 'd', 5 => 'e', 6 => 'f', 7 => 'g', 8 => 'h', 9 => 'i', 10 => 'j', 11 => 'k', 12 => 'l', 13 => 'm', 14 => 'n', 15 => 'o', 16 => 'p', 17 => 'q', 18 => 'r', 19 => 's', 20 => 't', 21 => 'u', 22 => 'v', 23 => 'w', 24 => 'x', 25 => 'y', 26 => 'z');
+  $letter_values = array('a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5, 'f' => 6, 'g' => 7, 'h' => 8, 'i' => 9, 'j' => 10, 'k' => 11, 'l' => 12, 'm' => 13, 'n' => 14, 'o' => 15, 'p' => 16, 'q' => 17, 'r' => 18, 's' => 19, 't' => 20, 'u' => 21, 'v' => 22, 'w' => 23, 'x' => 24, 'y' => 25, 'z' => 26);
 
+  $number_values = array(1 => 'a', 2 => 'b', 3 => 'c', 4 => 'd', 5 => 'e', 6 => 'f', 7 => 'g', 8 => 'h', 9 => 'i', 10 => 'j', 11 => 'k', 12 => 'l', 13 => 'm', 14 => 'n', 15 => 'o', 16 => 'p', 17 => 'q', 18 => 'r', 19 => 's', 20 => 't', 21 => 'u', 22 => 'v', 23 => 'w', 24 => 'x', 25 => 'y', 26 => 'z');
 
+  $message_array = str_split(strtolower($shift_message));
+  $num_str = '';
+
+  foreach($message_array as $char) {
+      $num_value = $letter_values[$char];
+      $num_shift = $num_value - $shift_value;
+      $num_str .= $num_shift;
+  }
+
+  $result = $num_str;
 
   $_SESSION['shift_cipher_output'] = $result;
   $form_state['redirect'] = 'shift_cipher_results_page';
@@ -70,4 +81,6 @@ function shift_cipher_form_submit($form, &$form_state) {
 
 function shift_cipher_results() {
   $result_display = $_SESSION['shift_cipher_output'];
+  var_dump($result_display);
+  return $result_display;
 }
