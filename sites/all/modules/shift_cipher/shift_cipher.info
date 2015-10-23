@@ -1,0 +1,5 @@
+name = Shift Cipher
+description = Ciphers message using the Caesar cipher
+package = My Modules
+core = 7.x
+files[] = shift_cipher.module
