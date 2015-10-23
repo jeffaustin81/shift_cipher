@@ -18,7 +18,9 @@ function shift_cipher_menu() {
   );
   return $items;
 }
-
+////////
+///////FORM
+///////
 function shift_cipher_form() {
   $form['shift_value'] = array(
     '#title' => 'Shift Value',
@@ -49,4 +51,23 @@ function shift_cipher_form() {
       '#value' => 'Go',
     );
   return $form;
+}
+////////
+///////FORM SUBMIT
+///////
+function shift_cipher_form_submit($form, &$form_state) {
+  $shift_value = $form_state['values']['shift_value'];
+  $shift_direction = $form_state['values']['shift_direction'];
+  $shift_message = $form_state['values']['shift_message'];
+
+  $letter_values = array(1 => 'a', 2 => 'b', 3 => 'c', 4 => 'd', 5 => 'e', 6 => 'f', 7 => 'g', 8 => 'h', 9 => 'i', 10 => 'j', 11 => 'k', 12 => 'l', 13 => 'm', 14 => 'n', 15 => 'o', 16 => 'p', 17 => 'q', 18 => 'r', 19 => 's', 20 => 't', 21 => 'u', 22 => 'v', 23 => 'w', 24 => 'x', 25 => 'y', 26 => 'z');
+
+
+
+  $_SESSION['shift_cipher_output'] = $result;
+  $form_state['redirect'] = 'shift_cipher_results_page';
+}
+
+function shift_cipher_results() {
+  $result_display = $_SESSION['shift_cipher_output'];
 }
